@@ -65,3 +65,14 @@ $ anvil --help
 $ cast --help
 ```
 # foundry-lottery
+
+Using Chainlink VRF and Chainlink Automation
+
+## Tests!
+
+1. Write deploy scripts
+2. Write tests
+   1. Local chain
+   2. Forked testnet
+   3. forked mainnet
+
