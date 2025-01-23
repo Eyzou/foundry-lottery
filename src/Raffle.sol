@@ -150,7 +150,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
     }
 
     //CEI check,effects,interactions Pattern
-    function fulfillRandomWords(uint256, /*requestId*/uint256[] calldata randomWords) internal virtual override {
+    function fulfillRandomWords(uint256, /*requestId*/ uint256[] calldata randomWords) internal virtual override {
         uint256 indexOfWinner = randomWords[0] % s_players.length;
         address payable winner = s_players[indexOfWinner];
         s_recentWinner = winner;

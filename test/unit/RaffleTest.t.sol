@@ -8,7 +8,6 @@ import {HelperConfig} from "script/HelperConfig.s.sol";
 import {Raffle} from "src/Raffle.sol";
 
 contract RaffleTest is Test {
-
     Raffle public raffle;
     HelperConfig public helperConfig;
 
@@ -63,14 +62,14 @@ contract RaffleTest is Test {
     function testEnteringRaffleEmitsEvent() public {
         vm.prank(PLAYER);
         // one true as one indexed - other non indexed and not DATA therefore false then the address of the contract.
-        vm.expectEmit(true,false,false,false,address(raffle));
+        vm.expectEmit(true, false, false, false, address(raffle));
         emit RaffleEntered(PLAYER);
         raffle.enterRaffle{value: entranceFee}();
     }
 
     function testDontAllowPlayersToEnterWhileRaffleIsCalculating() public {
         vm.prank(PLAYER);
-        raffle.enterRaffle {value:entranceFee}(); // to have players and check the condition of checkUpkeep
+        raffle.enterRaffle{value: entranceFee}(); // to have players and check the condition of checkUpkeep
         vm.warp(block.timestamp + interval + 1); // passed the deadline
         vm.roll(block.number + 1); // Also one new block added to make _excludedSenders
         raffle.performUpkeep(""); // now the raffle is calculating
@@ -79,11 +78,11 @@ contract RaffleTest is Test {
         vm.expectRevert(Raffle.Raffle__NotOpen.selector);
         vm.prank(PLAYER);
         raffle.enterRaffle{value: entranceFee}();
-
     }
 
-/** Check Upkeep **/
-
+    /**
+     * Check Upkeep *
+     */
     function testCheckUpkeepReturnsFalseifNoBalance() public {
         //Arrange
         vm.warp(block.timestamp + interval + 1); // passed the deadline
@@ -96,7 +95,7 @@ contract RaffleTest is Test {
 
     function testCheckUpkeepReturnsFalseifRaffleIsNotOpen() public {
         vm.prank(PLAYER);
-        raffle.enterRaffle {value:entranceFee}(); // to have players and check the condition of checkUpkeep
+        raffle.enterRaffle{value: entranceFee}(); // to have players and check the condition of checkUpkeep
         vm.warp(block.timestamp + interval + 1); // passed the deadline
         vm.roll(block.number + 1); // Also one new block added to make _excludedSenders
         raffle.performUpkeep(""); // now the raffle is calculating so it is not open.
@@ -115,7 +114,7 @@ contract RaffleTest is Test {
     function testPerformUpKeepCanOnlyRunIfCheckUpKeepIsTrue() public {
         //Arrange
         vm.prank(PLAYER);
-        raffle.enterRaffle {value:entranceFee}(); // to have players and check the condition of checkUpkeep
+        raffle.enterRaffle{value: entranceFee}(); // to have players and check the condition of checkUpkeep
         vm.warp(block.timestamp + interval + 1); // passed the deadline if comment - the test fail.
         vm.roll(block.number + 1); // Also one new block added to make _excludedSenders
         // Act / Assert
@@ -124,8 +123,8 @@ contract RaffleTest is Test {
 
     function testPerformUpKeepRevertIfCheckUpkeepIsFalse() public {
         uint256 currentBalance = 0;
-        uint numPlayers = 0;
-        Raffle.RaffleState rState= raffle.getRaffleState();
+        uint256 numPlayers = 0;
+        Raffle.RaffleState rState = raffle.getRaffleState();
 
         vm.prank(PLAYER);
         raffle.enterRaffle{value: entranceFee}();
@@ -133,8 +132,8 @@ contract RaffleTest is Test {
         numPlayers = 1;
 
         vm.expectRevert(
-            abi.encodeWithSelector(Raffle.Raffle_UpKeepNotNeeded.selector,currentBalance,numPlayers,uint256(rState))
-            );
+            abi.encodeWithSelector(Raffle.Raffle_UpKeepNotNeeded.selector, currentBalance, numPlayers, uint256(rState))
+        );
         raffle.performUpkeep("");
     }
 }

@@ -10,7 +10,7 @@ import {CreateSubscription, FundSubscription, AddConsumer} from "script/Interact
 contract DeployRaffle is Script {
     function run() public {}
 
-    function deployContract() public returns(Raffle,HelperConfig) {
+    function deployContract() public returns (Raffle, HelperConfig) {
         HelperConfig helperConfig = new HelperConfig();
         // local -> deploy mocks , get local config
         // sepolia -> get sepolia config
@@ -19,12 +19,12 @@ contract DeployRaffle is Script {
         if (config.subscriptionId == 0) {
             CreateSubscription createSubscription = new CreateSubscription();
             //saving the subscription ID in our variable
-            (config.subscriptionId,config.vrfCoordinator) = createSubscription.createSubscription(config.vrfCoordinator);
+            (config.subscriptionId, config.vrfCoordinator) =
+                createSubscription.createSubscription(config.vrfCoordinator);
 
             //Fund it
             FundSubscription fundSubscription = new FundSubscription();
             fundSubscription.fundSubscription(config.vrfCoordinator, config.subscriptionId, config.link);
-
         }
 
         vm.startBroadcast();
