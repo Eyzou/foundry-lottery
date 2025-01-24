@@ -75,4 +75,5 @@ Using Chainlink VRF and Chainlink Automation
    1. Local chain
    2. Forked testnet
    3. forked mainnet
+   4. Fuzz test hyper fort
 
